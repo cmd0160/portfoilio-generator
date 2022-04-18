@@ -1,14 +1,7 @@
 const inquirer = require("inquirer");
-// const fs = require("fs");
-// const generatePage = require("./src/page-template.js");
+const fs = require("fs");
+const generatePage = require("./src/page-template.js");
 
-// const pageHTML = generatePage(name, github);
-
-// fs.writeFile("./index.html", pageHTML, (err) => {
-//   if (err) throw new Error(err);
-
-//   console.log("Portfolio complete! Check out index.html to see the output!");
-// });
 
 const promptUser = () => {
   return inquirer.prompt([
@@ -16,33 +9,34 @@ const promptUser = () => {
       type: "input",
       name: "name",
       message: "What is your name? (Required)",
-      validate: nameInput => {
+      validate: (nameInput) => {
         if (nameInput) {
           return true;
         } else {
-          console.log('please enter your name!');
+          console.log("please enter your name!");
           return false;
         }
-      }
+      },
     },
     {
       type: "input",
       name: "github",
       message: "Enter your GitHub Username. (Required)",
-      validate: githubUsernameInput => {
+      validate: (githubUsernameInput) => {
         if (githubUsernameInput) {
           return true;
         } else {
-          console.log('Please enter your GitHub Username!');
+          console.log("Please enter your GitHub Username!");
           return false;
         }
-      }
+      },
     },
     {
-      type: 'confirm',
-      name: 'confirmAbout',
-      message: 'Would you like to enter some information about yourself for an "About" section?',
-      default: true
+      type: "confirm",
+      name: "confirmAbout",
+      message:
+        'Would you like to enter some information about yourself for an "About" section?',
+      default: true,
     },
     {
       type: "input",
@@ -54,7 +48,7 @@ const promptUser = () => {
         } else {
           return false;
         }
-      }
+      },
     },
   ]);
 };
@@ -79,14 +73,14 @@ const promptProject = (portfolioData) => {
         type: "input",
         name: "description",
         message: "Provide a description of the project (Required)",
-        validate: projectdescriptionInput => {
+        validate: (projectdescriptionInput) => {
           if (projectdescriptionInput) {
             return true;
           } else {
-            console.log('Please enter a project description!');
+            console.log("Please enter a project description!");
             return false;
           }
-        }
+        },
       },
       {
         type: "checkbox",
@@ -106,14 +100,14 @@ const promptProject = (portfolioData) => {
         type: "input",
         name: "link",
         message: "Enter the GitHub link to your project. (Required)",
-        validate: githubLinkInput => {
+        validate: (githubLinkInput) => {
           if (githubLinkInput) {
             return true;
           } else {
-            console.log('Please enter your project github link!');
+            console.log("Please enter your project github link!");
             return false;
           }
-        }
+        },
       },
       {
         type: "confirm",
@@ -141,5 +135,13 @@ const promptProject = (portfolioData) => {
 promptUser()
   .then(promptProject)
   .then((portfolioData) => {
-    console.log(portfolioData);
+    const pageHTML = generatePage(portfolioData);
+
+    fs.writeFile("./index.html", pageHTML, (err) => {
+      if (err) throw new Error(err);
+
+      // console.log(
+      //   "Portfolio complete! Check out index.html to see the output!"
+      // );
+    });
   });
